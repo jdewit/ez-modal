@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--dependencies start -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.css" rel="stylesheet">
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
+  <script src="//rawgit.com/jdewit/ez-transition/master/dist/ez-transition.min.js"></script>
+  <!--dependencies end -->
+
+  <!--<link href="dist/ez-modal.min.css" rel="stylesheet"/>-->
+  <script src="src/ez-modal.js"></script>
+  <script src="dist/ez-modal-tpl.min.js"></script>
+
+  <script>
+    angular.module('myApp', ['ez.modal'])
+
+    .controller('AppCtrl', ['$scope', '$interval', '$q', '$modal', function AppCtrl($scope, $interval, $q, $modal) {
+
+        $scope.open = function() {
+          $modal.open({
+            templateUrl: 'custom.html',
+            controller: 'ModalCtrl',
+          });
+        };
+    }])
+
+    .controller('ModalCtrl', ['$scope', '$modalInstance', function($scope, $modalInstance) {
+        $scope.dismiss = $modalInstance.dismiss;
+    }])
+
+    .run(['EzModalConfig', '$q', function(EzModalConfig, $q) {
+        EzModalConfig.dismissPromise = function() {
+          var defer = $q.defer();
+
+          setTimeout(function() {
+            if (confirm('Are you sure?')) {
+              defer.resolve();
+            } else {
+              defer.reject();
+            }
+          });
+
+          return defer.promise;
+        };
+    }])
+;
+
+  </script>
+
+</head>
+<body ng-app="myApp">
+  <div ng-controller="AppCtrl" class="container">
+    <div class="page-header">
+      <h1>ez-modal</h1>
+    </div>
+    <div class="page-body">
+      <a class="btn btn-success" ng-click="open()">Open Modal</a>
+    </div>
+  </div>
+  <script id="custom.html" type="text/ng-template">
+    <div>
+      <div class="modal-header">
+        Hey
+      </div>
+      <div class="modal-body">
+        Content
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-default" ng-click="dismiss()">Close</a>
+      </div>
+    </div>
+  </script>
+
+</body>
+
+</html>
+
