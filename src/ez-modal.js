@@ -276,6 +276,7 @@ angular.module('ez.modal', ['ez.transition'])
 
         var modalDomEl = $compile(angularDomEl)(modal.scope);
         openedWindows.top().value.modalDomEl = modalDomEl;
+        modalInstance.modalEl = modalDomEl;
         body.append(modalDomEl);
         body.addClass(OPENED_MODAL_CLASS);
       };

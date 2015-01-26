@@ -32,7 +32,9 @@
     }])
 
     .run(['EzModalConfig', '$q', function(EzModalConfig, $q) {
-        EzModalConfig.dismissPromise = function() {
+        EzModalConfig.dismissPromise = function(modalInstance, reason) {
+          console.log(modalInstance, reason);
+
           var defer = $q.defer();
 
           setTimeout(function() {
