@@ -151,7 +151,6 @@ angular.module('ez.modal', ['ez.transition'])
       var backdropDomEl, backdropScope;
       var openedWindows = $$stackedMap.createNew();
       var $modalStack = {};
-      var preventLocationChange;
 
       function backdropIndex() {
         var topBackdropIndex = -1;
@@ -197,10 +196,6 @@ angular.module('ez.modal', ['ez.transition'])
             backdropDomEl = undefined;
             backdropScope = undefined;
           }
-      }
-
-      function preventRouteChange(e) {
-        e.preventDefault();
       }
 
       function removeAfterAnimate(domEl, scope, emulateTime, done) {
@@ -251,7 +246,7 @@ angular.module('ez.modal', ['ez.transition'])
 
       $modalStack.open = function (modalInstance, modal) {
 
-        preventLocationChange = $rootScope.$on('$locationChangeStart', function(e) {
+        modalInstance.preventLocationChange = $rootScope.$on('$locationChangeStart', function(e) {
           e.preventDefault();
         });
 
@@ -292,7 +287,7 @@ angular.module('ez.modal', ['ez.transition'])
 
       $modalStack.close = function (modalInstance, result) {
 
-        preventLocationChange();
+        modalInstance.preventLocationChange();
 
         var modalWindow = openedWindows.get(modalInstance);
         if (modalWindow) {
@@ -303,7 +298,7 @@ angular.module('ez.modal', ['ez.transition'])
 
       var dismiss = function (modalInstance, reason) {
 
-        preventLocationChange();
+        modalInstance.preventLocationChange();
 
         var modalWindow = openedWindows.get(modalInstance);
         if (modalWindow) {
