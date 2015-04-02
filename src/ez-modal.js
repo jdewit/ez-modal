@@ -246,6 +246,7 @@ angular.module('ez.modal', ['ez.transition'])
 
       $modalStack.open = function (modalInstance, modal) {
 
+
         modalInstance.preventLocationChange = $rootScope.$on('$locationChangeStart', function(e) {
           e.preventDefault();
         });
@@ -257,7 +258,8 @@ angular.module('ez.modal', ['ez.transition'])
           keyboard: modal.keyboard
         });
 
-        var body = $document.find('body').eq(0),
+        var $body = $document.find('body'),
+            body = $body.eq(0),
             currBackdropIndex = backdropIndex();
 
         if (currBackdropIndex >= 0 && !backdropDomEl) {
@@ -277,6 +279,14 @@ angular.module('ez.modal', ['ez.transition'])
           'index': openedWindows.length() - 1,
           'animate': 'animate'
         }).html(modal.content);
+
+        // offset from existing modals on the page
+        var existingModalCount = $body.find('.modal.in').length;
+        if (existingModalCount > 0) {
+          angularDomEl.css({
+            top: existingModalCount * 20
+          });
+        }
 
         var modalDomEl = $compile(angularDomEl)(modal.scope);
         openedWindows.top().value.modalDomEl = modalDomEl;
